@@ -1,4 +1,6 @@
 build/
+calibration/
+data/
 devel/
 *.log
 *.swp
