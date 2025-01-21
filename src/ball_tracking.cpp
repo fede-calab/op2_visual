@@ -195,7 +195,7 @@ int ball_tracking(ros::NodeHandle nh, ros::Publisher& ball_pub, bool no_display)
                 // Publish on ROS topic
                 ball_msgs::ball ball_msg;
                 ball_msg.velocity = velocity;
-                ball_msg.distance = roundUp((float)distFromOffset);
+                ball_msg.distance = distFromOffset;
                 ball_pub.publish(ball_msg);
 
                 ROS_INFO("Published ball info - Velocity: %.2f cm/s, Distance: %.2f cm",

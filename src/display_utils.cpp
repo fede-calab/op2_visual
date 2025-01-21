@@ -2,11 +2,6 @@
 #include "op2_visual/display_utils.h"
 #include <cmath>
 
-float roundUp(float n)
-{
-    return std::round(n);
-}
-
 void updateDisplay(double markerDistance,
                    double offsetRatio,
                    bool   ballDetected,
