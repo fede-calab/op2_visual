@@ -61,19 +61,27 @@ set(OP2_VISUAL_SOURCES
   src/marker_detection.cpp
   src/display_utils.cpp
 )
+set(CAMERA_CALIBRATION_SOURCES
+  src/camera_calibration_node.cpp
+)
 
 # --------------------------
-# Executable Definitions
+# Executables Definitions
 # --------------------------
 add_executable(op2_visual_node ${OP2_VISUAL_SOURCES})
+add_executable(camera_calibration_node ${CAMERA_CALIBRATION_SOURCES})
 
 # Specify additional include directories for the executable
 target_include_directories(${PROJECT_NAME}_node PRIVATE
     ${OpenCV_INCLUDE_DIRS}
 )
 
-# Link Libraries to the Executable
+# Link Libraries to the Executables
 target_link_libraries(op2_visual_node
+    ${catkin_LIBRARIES}
+    ${OpenCV_LIBRARIES}
+)
+target_link_libraries(camera_calibration_node
     ${catkin_LIBRARIES}
     ${OpenCV_LIBRARIES}
 )
