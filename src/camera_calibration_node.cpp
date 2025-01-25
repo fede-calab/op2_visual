@@ -18,13 +18,37 @@
 #include <filesystem>
 
 #include <ros/ros.h>
+#include <ros/package.h>
 
 using namespace cv;
 using namespace std;
 
 namespace fs = std::filesystem;
+namespace pkg = ros::package;
 
-int main() {
+int main(int argc, char** argv) {
+    ros::init(argc, argv, "camera_calibration_node");
+    ros::NodeHandle nh;
+
+    string cameraName = "";
+    bool no_gui = false;
+        for (int i = 1; i < argc; ++i) {
+        string arg = argv[i];
+        if (arg == "--no-gui") {
+            no_gui = true;
+        } else if (arg.substr(0, 13) == "--camera-name") {
+            if (i + 1 < argc) {
+                cameraName = argv[++i];
+            } else {
+                cerr << "Error: --camera-name option requires a value." << endl;
+                return 1;
+            }
+        } else {
+            cerr << "Unknown argument: " << arg << endl;
+            return 1;
+        }
+    }
+
     // Definiamo la checkerboard
     Size boardSize(8, 6);
     float squareSize = 0.025; // Metri (prima era 2.5)
@@ -40,11 +64,10 @@ int main() {
             obj.push_back(Point3f(j * squareSize, i * squareSize, 0));
         }
     }
-
+    
     // Percorso della directory contenente le immagini della checkerboard catturate con la fotocamera
-    string cameraName = "logitech_c270_hd_webcam";
-    // string cameraName = "philips_spz_3000";
-    string cameraDir = "/home/federico/Desktop/catkin_ws_prova/src/op2_visual/calibration/logitech_c270_hd_webcam/";
+    string cameraDir = pkg::getPath("op2_visual") + "/calibration/" + cameraName + "/";
+
     // string cameraDir = "/home/federico/Desktop/catkin_ws/src/op2_visual/calibration/philips_spz_3000/";
     string inputDir = cameraDir + "*.jpg";
     string cornerOutputDir = cameraDir + "corner/";
@@ -89,8 +112,12 @@ int main() {
             imwrite(outputPath, frame);
             cout << "Processed image saved to: " << outputPath << endl;
 
-            // imshow("Chessboard Detection", frame);
-            // waitKey(100);
+            /*
+            if (!no_display) {
+                imshow("Chessboard Detection", frame);
+                waitKey(100);
+            }
+            */
         }
     }
     // destroyAllWindows();
@@ -104,7 +131,7 @@ int main() {
     cout << "Distortion coefficients: \n" << distCoeffs << endl;
 
     // Salva i risultati su di un file .yml
-    string filePath = cameraDir + cameraName + "_params.yml";
+    string filePath = pkg::getPath("op2_visual") + "/config/" + cameraName + "_params.yml";
     FileStorage fs(filePath, FileStorage::WRITE);
     fs << "camera_matrix" << cameraMatrix;
     fs << "distortion_coefficients" << distCoeffs;

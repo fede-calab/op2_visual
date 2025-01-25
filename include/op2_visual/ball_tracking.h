@@ -7,6 +7,6 @@
 #include <ball_msgs/ball.h>
 
 // The main tracking function to be called by your ROS node.
-int ball_tracking(ros::NodeHandle nh, ros::Publisher& ball_pub, bool no_display);
+int ball_tracking(ros::NodeHandle nh, ros::Publisher& ball_pub);
 
 #endif // BALL_TRACKING_H

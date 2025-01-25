@@ -17,6 +17,7 @@
 #include <ros/ros.h>
 #include <ros/package.h>
 #include <ball_msgs/ball.h>
+#include <string>
 
 // Global control for graceful shutdown
 static std::atomic_bool g_run(true);
@@ -27,8 +28,14 @@ void sigintHandler(int)
     g_run.store(false);
 }
 
-int ball_tracking(ros::NodeHandle nh, ros::Publisher& ball_pub, bool no_display)
+int ball_tracking(ros::NodeHandle nh, ros::Publisher& ball_pub)
 {
+    bool no_display = false;
+    std::string cameraName = "";
+
+    nh.getParam("no_gui", no_display);
+    nh.getParam("camera_name", cameraName);
+
     // Register SIGINT for Ctrl+C
     std::signal(SIGINT, sigintHandler);
 
@@ -40,7 +47,7 @@ int ball_tracking(ros::NodeHandle nh, ros::Publisher& ball_pub, bool no_display)
     }
 
     // Load camera calibration
-    std::string yamlFilePath = ros::package::getPath("op2_visual") + "/calibration/logitech_c270_hd_webcam/logitech_c270_hd_webcam_params.yml";
+    std::string yamlFilePath = ros::package::getPath("op2_visual") + "/config/" + cameraName + "_params.yml";
     cv::FileStorage fs(yamlFilePath, cv::FileStorage::READ);
     if (!fs.isOpened()) {
         std::cerr << "Error: Could not open camera calibration file.\n";

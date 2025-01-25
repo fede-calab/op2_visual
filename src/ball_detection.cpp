@@ -13,10 +13,9 @@ bool detectBallWithMask(const cv::Mat& frame,
         cv::Mat hsv;
         cv::cvtColor(frame, hsv, cv::COLOR_BGR2HSV);
 
-        // Example green range (tweak these values to fit your lighting/conditions)
-        // Starting from RGB #16C344
-        cv::Scalar lowerBound(75, 179, 179);
-        cv::Scalar upperBound(95, 255, 245);
+        // Example green range
+        cv::Scalar lowerBound(40, 100, 100);
+        cv::Scalar upperBound(80, 255, 255);
 
         // Threshold to get ballMask
         cv::inRange(hsv, lowerBound, upperBound, ballMask);
