@@ -1,1 +1,1 @@
-- git: {local-name: ball_msgs, uri: 'https://github.com/Fede5403/ball_msgs.git', version: 'main'}
+- git: {local-name: ball_msgs, uri: 'https://github.com/fede-calab/ball_msgs.git', version: 'main'}
